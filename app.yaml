@@ -7,14 +7,18 @@ threadsafe: true
 handlers:
 - url: /static/css
   static_dir: static/css
+  
 - url: /static/js
   static_dir: static/js
-- url: /static/css
-  static_dir: static/css
+
 - url: /signin
+  script: main.application
   login: required
+
 - url: /profile
+  script: main.application
   login: required
+
 - url: .*
   script: main.application
 

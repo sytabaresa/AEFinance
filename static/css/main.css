@@ -1,0 +1,6 @@
+body { margin: 0; padding: 0; }
+ul { margin: 0; padding: 0; clear: right; background: #000; }
+ul li { float: left; clear: none; display: block; margin: 0; padding: 0 14px 0 0; list-style: none; background: #000; }
+ul li a { text-decoration: none; color: #fff; font: 16px/16px Arial, sans-serif; }
+h1, h2, h3, h4, h5, h6 { float: left; clear: left; }
+p { float: left; clear: left; display: block; }

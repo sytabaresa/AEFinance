@@ -12,7 +12,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         
         template_values = {
-            'title': 'aefinance',
+            'title': 'AEFinance',
             'url': users.create_login_url('/signin'),
             'link_text': 'Sign in using your google account'
         }
@@ -35,7 +35,9 @@ class SignIn(webapp2.RequestHandler):
                 user = AEFUser(id=user.user_id(), email=user.email())
                 user_key = user.put()
                 bank_account = BankAccount(parent=user_key)
-                bank_account.put()
+                bank_key = bank_account.put()
+                currency = Currency(code='USD', amount=1000, parent=bank_key)
+                currency.put()
                 
         self.redirect('/profile')
         
@@ -51,4 +53,4 @@ class Profile(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(template.render(template_values))
    
-application = webapp2.WSGIApplication([('/', MainPage), ('/signin', SignIn), ('/profile', Profile), ('/rates', ViewRates), ('/trade', MakeTrade), ('/account', ViewBankAccount)], debug=True)
+application = webapp2.WSGIApplication([('/', MainPage), ('/signin', SignIn), ('/profile', Profile), ('/rates', ViewRates), ('/trade', MakeTrade), ('/account', ViewBankAccount), ('/transaction', Transaction)], debug=True)

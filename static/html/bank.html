@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <script type="text/javascript" src="/static/js/bank.js"></script>
   </head>
   <body>
     <div class="content">
@@ -11,7 +12,11 @@
         {% endfor %}
       </ul>
       <h2>{{title}}</h2>
-      <p>{{ balance }}</p>
+      <ul class="bank-content">
+      {% for c in balance %}
+        <li><label>{{ c.code }}</label>: {{ c.amount }}</li>
+      {% endfor %}
+      </ul>
     </div>
   </body>
 </html>

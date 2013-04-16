@@ -12,3 +12,5 @@ p { float: left; clear: left; display: block; }
 .tradearea { float: left; clear: left; }
 .tradearea input { margin: 14px 0 0 0; }
 .tradearea .max { color: red; }
+.balance { display: block; float: left; clear: left; margin: 28px 0 0 0; }
+.balance .sum { color: green; }

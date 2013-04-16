@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <script type="text/javascript" src="/static/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/static/js/bank.js"></script>
   </head>
   <body>
@@ -14,9 +15,12 @@
       <h2>{{title}}</h2>
       <ul class="bank-content">
       {% for c in balance %}
-        <li><label>{{ c.code }}</label>: {{ c.amount }}</li>
+        <li class="currency" data-code="{{ c.code }}" data-amount="{{ c.amount }}"><label>{{ c.code }}</label>: {{ c.amount }}</li>
       {% endfor %}
       </ul>
+      <div class="balance">
+        <label>Your total balance in USD: $</label><span class="sum"></span>
+      </div>
     </div>
   </body>
 </html>

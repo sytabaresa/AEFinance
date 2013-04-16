@@ -2,12 +2,24 @@ var Rates = Rates || {};
 
 (function($, window, document, undefined){
   $(document).ready(function(){
-    $('.max').text('(max: ' + $('.currency1 :selected').data('amount') + ')');
-    $('.currency2').bind('change', function(){
-      
+
       var currency1 = $('.currency1').val();
       var currency2 = $('.currency2').val();
-      var query = 'SELECT * FROM yahoo.finance.xchange WHERE pair in ("' + currency1 + currency2 + '")'
+      var pairs = [];
+          
+      var query = 'SELECT * FROM yahoo.finance.xchange WHERE pair in (';
+      
+      $('.currency').each(function(){
+        query += '"USD' + $(this).data('code') + '"';
+        
+        if($(this).index() != ($('.currency').size() -1)){
+          query += ',';        
+        }
+      });
+      
+      query += ')';
+      console.log(query);
+      
       var dataOptions = {
         q: query,
         format: 'json',
@@ -15,6 +27,7 @@ var Rates = Rates || {};
         env: 'store://datatables.org/alltableswithkeys',
         callback: 'Rates.aef_handler'
       }
+      
       var yqlurl = 'http://query.yahooapis.com/v1/public/yql';
       
       $.ajax({url: yqlurl,
@@ -24,48 +37,20 @@ var Rates = Rates || {};
             jsonp: false,
             jsonpCallback: 'Rates.aef_handler',
       });
-      
-    });
-    
-    $('.currency1').bind('change', function(){
-      $('.max').text('(max: ' + $('.currency1 :selected').data('amount') + ')');      
-    });
-    
-    $('#tradeform :submit').bind('click', function(e){
-      e.preventDefault();
-           
-      if(parseFloat($('.currency1 :selected').data('amount')) < parseFloat($('.amount').val())){
-        alert("amount must be less than " + $('.currency1 :selected').data('amount'));        
-      } else {
-        var tradeurl = '/transaction'
-        
-        var tradeOptions = {
-          old_c: $('.currency1').val(),
-          new_c: $('.currency2').val(),
-          rate: Rates.rate,
-          amount: $('.amount').val()
-        }
-        $.ajax({url: tradeurl,
-              timeout: 2000,
-              data: tradeOptions,
-              dataType: 'jsonp',
-              jsonp: false,
-              jsonpCallback: 'Rates.aef_handler',
-        });
-      }
-    });
-    $('.currency2').trigger('change');
   });
   
   Rates = {
     aef_handler: function(data){
-      if(data.transaction_status && data.transaction_status == "success"){
-        window.location.href= '/account';
+      var rates = data.query.results.rate;
+      var sum = 0;
+      for(i=0;i<rates.length;i++){
+        if(rates[i].Rate < 1){
+          sum += parseFloat($('.currency').eq(i).data('amount'));
+        } else {
+          sum += (parseFloat(rates[i].Rate) * parseFloat($('.currency').eq(i).data('amount')));
+        }
       }
-      $('.show-rate').text('');
-      Rates.rate = data.query.results.rate.Rate;
-      $('.show-rate').append('<span><label>Current Rate</label>: ' + Rates.rate + '</span>');
-      
+      $('.balance .sum').text(sum);
     },
     rate: 0
     
